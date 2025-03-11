@@ -59,14 +59,21 @@ export function Avatar(props) {
 
 
 
-  const handlePlayAudio = async (src, data) => {
+  const handlePlayAudio = async (src, data,type="ongoing") => {
     if (audioRef.current) audioRef.current.pause();
     audioRef.current = new Audio(src);
     lipsyncRef.current = data;
 
     audioRef.current.play();
     props.setStatus("Speaking...");
-    setAnimation("Angry");
+
+    if(type == "ongoing"){
+      setAnimation("Angry");
+      setTimeout(() => setAnimation("Idle"),1000);
+    }else{
+      setAnimation("Greeting");
+      setTimeout(() => setAnimation("Idle"),4000);
+    }
 
     audioRef.current.addEventListener("ended", () => {
       setAudioPlay(false);
@@ -254,7 +261,7 @@ export function Avatar(props) {
 
 
   useEffect(() => {
-    setTimeout(() => handlePlayAudio(welcome.src,welcome.data),2000)
+    setTimeout(() => handlePlayAudio(welcome.src,welcome.data,"intial_message"),2000)
     
   },[]);
 

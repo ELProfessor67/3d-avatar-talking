@@ -32,7 +32,7 @@ const lipSyncMessage = async (filename,rubarbpath) => {
   };
 
 export async function getSpeakingData(text) {
-    const url = "https://api.deepgram.com/v1/speak?model=aura-angus-en&encoding=linear16&sample_rate=16000";
+    const url = "https://api.deepgram.com/v1/speak?model=aura-zeus-en&encoding=linear16&sample_rate=16000";
     const apiKey = process.env.DEEPGRAM_API_KEY;
     const data = { text };
 
