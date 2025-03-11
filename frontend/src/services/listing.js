@@ -29,7 +29,7 @@ export class Listing {
             const mediaRecorder = new MediaRecorder(stream, {
                 mimeType: 'audio/webm',
             })
-            this.socket = new WebSocket(`wss://api.deepgram.com/v1/listen?model=nova-2-phonecall&language=en`, [
+            this.socket = new WebSocket(`wss://api.deepgram.com/v1/listen?model=nova-2-phonecall&language=en&smart_format=true&multichannel=false&no_delay=true&endpointing=300`, [
                 'token',
                 "e162a8af9703f7130dd7786d1534981c3a7ccc97"
             ])
@@ -47,7 +47,7 @@ export class Listing {
                 const received = JSON.parse(message.data)
                 const transcript = received.channel.alternatives[0].transcript
                 if(transcript)  this.stop();
-                if (transcript && received.is_final) {
+                if (transcript && received.speech_final) {
                     this.setStatus("Thinking...");
                     const response = await getResponse(transcript);
                     this.play(response.src,response.data)
