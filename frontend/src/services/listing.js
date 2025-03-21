@@ -1,5 +1,5 @@
 import { getResponse } from "../utils/getResponse";
-
+import { VideoSDKNoiseSuppressor } from "@videosdk.live/videosdk-media-processor-web";
 
 export class Listing {
     audioStream = null;
@@ -7,6 +7,7 @@ export class Listing {
     play=null
     stop=null
     setStatus = null;
+    noiseProcessor = new VideoSDKNoiseSuppressor();
 
     constructor(handlePlayAudio,handleIntrupt,setStatus) {
         this.play = handlePlayAudio;
@@ -24,9 +25,12 @@ export class Listing {
     }
 
     sendAudioStream() {
-        this.getAudioStream().then(stream => {
+        this.getAudioStream().then(async (stream) => {
             this.audioStream = stream;
-            const mediaRecorder = new MediaRecorder(stream, {
+            const processedStream = await this.noiseProcessor.getNoiseSuppressedAudioStream(
+                stream
+              );
+            const mediaRecorder = new MediaRecorder(processedStream, {
                 mimeType: 'audio/webm',
             })
             this.socket = new WebSocket(`wss://api.deepgram.com/v1/listen?model=nova-2-phonecall&language=en&smart_format=true&multichannel=false&no_delay=true&endpointing=300`, [
