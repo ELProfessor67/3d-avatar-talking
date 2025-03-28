@@ -52,8 +52,10 @@ export class Listing {
                 const transcript = received.channel.alternatives[0].transcript
                 if(transcript)  this.stop();
                 if (transcript && received.speech_final) {
+                    console.log(`User: ${transcript}`)
                     this.setStatus("Thinking...");
                     const response = await getResponse(transcript);
+                    console.log("George Washington:", response.transcription)
                     this.play(response.src,response.data)
                 }
             }

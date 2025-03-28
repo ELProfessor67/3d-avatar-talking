@@ -4,6 +4,7 @@ import cors from "cors";
 import "dotenv/config"
 import { getSpeakingData } from "./utils/generateAudio.js";
 import { generateResponse } from "./utils/generateResponse.js";
+import fs from "fs";
 
 // Initialize Express app
 const app = express();
@@ -24,10 +25,13 @@ app.get("/", (req, res) => {
 app.get("/chat", async (req, res) => {
     try {
         const { message } = req.query;
+        console.log("User: ",message);
         const text = await generateResponse(message)
+        console.log("Bot: ",text);
         const audio = await getSpeakingData(text);
-        res.json(audio);
+        
         console.log("message send successfully")
+        res.json({...audio, transcription: text});
     } catch (error) {
         console.log(error.message,'hello')
         res.status(501).json({success: false,message: error.message})

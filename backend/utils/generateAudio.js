@@ -37,6 +37,7 @@ export async function getSpeakingData(text) {
     const data = { text };
 
     try {
+        console.log("generating audio...");
         const response = await fetch(url, {
             method: 'POST',
             headers: {
@@ -51,12 +52,12 @@ export async function getSpeakingData(text) {
             console.error("Error response:", errorText);
             return;
         }
-
+        console.log("audio generated...");
         const audioBuffer = await response.arrayBuffer();
         const base64Audio = Buffer.from(audioBuffer).toString('base64');
         const audioSrc = `data:audio/wav;base64,${base64Audio}`;
 
-        const audioData = Buffer.from(base64Audio, 'base64');
+  
         // Save the file
         const filename = Date.now();
         const filepath = path.join(process.cwd(),'audios',`${filename}.mp3`);
@@ -67,7 +68,7 @@ export async function getSpeakingData(text) {
         fs.unlinkSync(lip_sync)
         fs.unlinkSync(wav_file)
         fs.unlinkSync(filepath)
-        return {src: audioSrc,data: lips_sync_data.mouthCues};
+        return {data: lips_sync_data.mouthCues,src: audioSrc};
     } catch (error) {
         console.error("Error:", error);
     }
