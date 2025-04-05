@@ -42,9 +42,7 @@ export class Listing {
                 processedStream = stream; // fallback
             }
 
-            const mediaRecorder = new MediaRecorder(processedStream, {
-                mimeType: 'audio/webm',
-            })
+            const mediaRecorder = new MediaRecorder(processedStream)
 
             this.socket = new WebSocket(`wss://api.deepgram.com/v1/listen?model=nova-2-phonecall&language=en&smart_format=true&multichannel=false&no_delay=true&endpointing=300`, [
                 'token',
