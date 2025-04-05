@@ -12,8 +12,7 @@ export const Experience = ({ rotation }) => {
   return (
     <>
       <OrbitControls
-
-        // enableZoom={false} enableRotate={false}
+        enableZoom={false} enableRotate={false}
       />
       <Html position={[0,2.6,0]}>
         <div className="status-box">
