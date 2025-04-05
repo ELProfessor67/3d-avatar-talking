@@ -4,12 +4,12 @@ import { VideoSDKNoiseSuppressor } from "@videosdk.live/videosdk-media-processor
 export class Listing {
     audioStream = null;
     socket = null;
-    play=null
-    stop=null
+    play = null
+    stop = null
     setStatus = null;
     noiseProcessor = new VideoSDKNoiseSuppressor();
 
-    constructor(handlePlayAudio,handleIntrupt,setStatus) {
+    constructor(handlePlayAudio, handleIntrupt, setStatus) {
         this.play = handlePlayAudio;
         this.stop = handleIntrupt;
         this.setStatus = setStatus;
@@ -20,20 +20,32 @@ export class Listing {
 
 
     async getAudioStream() {
-        const stream = navigator.mediaDevices.getUserMedia({audio: true})
+        const stream = navigator.mediaDevices.getUserMedia({ audio: true })
         return stream;
     }
 
     sendAudioStream() {
         this.getAudioStream().then(async (stream) => {
             this.audioStream = stream;
-            const processedStream = await this.noiseProcessor.getNoiseSuppressedAudioStream(
-                stream
-              );
+
+            let processedStream = stream;
+
+            if ('MediaStreamTrackGenerator' in window) {
+                try {
+                    processedStream = await this.noiseProcessor.getNoiseSuppressedAudioStream(stream);
+                } catch (err) {
+                    console.warn('Noise suppression failed:', err);
+                    processedStream = stream; // fallback to raw stream
+                }
+            } else {
+                console.warn('Noise suppression not supported on this browser (e.g. iOS Safari)');
+                processedStream = stream; // fallback
+            }
+
             const mediaRecorder = new MediaRecorder(processedStream, {
                 mimeType: 'audio/webm',
             })
-          
+
             this.socket = new WebSocket(`wss://api.deepgram.com/v1/listen?model=nova-2-phonecall&language=en&smart_format=true&multichannel=false&no_delay=true&endpointing=300`, [
                 'token',
                 "e162a8af9703f7130dd7786d1534981c3a7ccc97"
@@ -51,13 +63,13 @@ export class Listing {
             this.socket.onmessage = async (message) => {
                 const received = JSON.parse(message.data)
                 const transcript = received?.channel?.alternatives[0]?.transcript
-                if(transcript)  this.stop();
+                if (transcript) this.stop();
                 if (transcript && received.is_final) {
                     console.log(`User: ${transcript}`)
                     this.setStatus("Thinking...");
                     const response = await getResponse(transcript);
                     console.log("George Washington:", response.transcription);
-                    this.play(response.src,response.data)
+                    this.play(response.src, response.data)
                 }
             }
 
@@ -73,14 +85,14 @@ export class Listing {
 
 
 
-    handlemute(value){
+    handlemute(value) {
         this.audioStream.getAudioTracks().forEach(track => {
             track.enabled = !value;
         });
     }
 
 
-    disconnect(){
+    disconnect() {
         this.socket.close();
     }
 }

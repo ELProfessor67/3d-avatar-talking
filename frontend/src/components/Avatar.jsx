@@ -65,7 +65,7 @@ export function Avatar(props) {
     lipsyncRef.current = data;
 
     audioRef.current.play().then(() => console.log("Audio played!"))
-    .catch(err => alert(err.message));
+    .catch(err => console.log("Error playing audio:", err));
 
     
     props.setStatus("Speaking...");
