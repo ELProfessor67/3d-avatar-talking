@@ -33,6 +33,7 @@ export class Listing {
             const mediaRecorder = new MediaRecorder(processedStream, {
                 mimeType: 'audio/webm',
             })
+          
             this.socket = new WebSocket(`wss://api.deepgram.com/v1/listen?model=nova-2-phonecall&language=en&smart_format=true&multichannel=false&no_delay=true&endpointing=300`, [
                 'token',
                 "e162a8af9703f7130dd7786d1534981c3a7ccc97"
@@ -49,13 +50,13 @@ export class Listing {
 
             this.socket.onmessage = async (message) => {
                 const received = JSON.parse(message.data)
-                const transcript = received.channel.alternatives[0].transcript
+                const transcript = received?.channel?.alternatives[0]?.transcript
                 if(transcript)  this.stop();
-                if (transcript && received.speech_final) {
+                if (transcript && received.is_final) {
                     console.log(`User: ${transcript}`)
                     this.setStatus("Thinking...");
                     const response = await getResponse(transcript);
-                    console.log("George Washington:", response.transcription)
+                    console.log("George Washington:", response.transcription);
                     this.play(response.src,response.data)
                 }
             }
@@ -65,7 +66,7 @@ export class Listing {
             }
 
             this.socket.onerror = (error) => {
-                console.log({ event: 'onerror', error })
+                console.log({ event: 'onerror', error: error.message })
             }
         }).catch(err => console.log(err.message));
     }

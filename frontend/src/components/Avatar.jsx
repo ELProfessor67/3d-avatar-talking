@@ -80,7 +80,7 @@ export function Avatar(props) {
       audioRef.current = null;
       lipsyncRef.current = [];
       setAnimation("Idle");
-      props.setStatus("Listing...");
+      props.setStatus("Listening...");
 
       Object.values(corresponding).forEach((value) => {
         if (!smoothMorphTarget) {
@@ -123,7 +123,7 @@ export function Avatar(props) {
       audioRef.current = null;
       lipsyncRef.current = [];
       setAudioPlay(false);
-      props.setStatus("Listing...");
+      props.setStatus("Listening...");
 
       Object.values(corresponding).forEach((value) => {
         if (!smoothMorphTarget) {
@@ -290,4 +290,5 @@ export function Avatar(props) {
   )
 }
 
+// useGLTF.preload('/models/model.glb')
 useGLTF.preload('/models/model.glb')
