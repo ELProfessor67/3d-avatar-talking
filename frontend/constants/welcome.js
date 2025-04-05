@@ -1,7 +1,7 @@
 import { BACKEND_URL } from "../src/utils/getResponse";
 
 export const welcome = {
-    "src": `${BACKEND_URL}/welcome.wav`,
+    "src": `${BACKEND_URL}/welcome.mp3`,
     "data": [
         {
             "start": 0,

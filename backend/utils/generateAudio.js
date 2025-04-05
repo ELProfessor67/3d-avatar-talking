@@ -25,11 +25,14 @@ const lipSyncMessage = async (filename,rubarbpath) => {
     await execCommand(
       `${rubarbpath} -f json -o audios/${filename}.json audios/${filename}.wav -r phonetic`
     );
+    await execCommand(
+      `ffmpeg -i audios/${filename}.wav -codec:a libmp3lame -b:a 192k audios/${filename}-play.mp3`
+    );
     console.log(`${rubarbpath} -f json -o audios/${filename}.json audios/${filename}.wav -r phonetic`)
     // -r phonetic is faster but less accurate
     console.log(`Lip sync done in ${new Date().getTime() - time}ms`);
 
-    return {lip_sync: `audios/${filename}.json`,wav_file: `audios/${filename}.wav`,file_filename: `${filename}.wav`};
+    return {lip_sync: `audios/${filename}.json`,wav_file: `audios/${filename}.wav`,file_filename: `${filename}-play.mp3`};
   };
 
 export async function getSpeakingData(text) {
@@ -67,7 +70,7 @@ export async function getSpeakingData(text) {
         const {lip_sync, wav_file,file_filename} = await lipSyncMessage(filename,rubarbpath);
         const lips_sync_data = JSON.parse(fs.readFileSync(lip_sync));
         fs.unlinkSync(lip_sync)
-        // fs.unlinkSync(wav_file)
+        fs.unlinkSync(wav_file)
         fs.unlinkSync(filepath)
         return {data: lips_sync_data.mouthCues,src: file_filename};
     } catch (error) {
