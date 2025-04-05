@@ -15,7 +15,7 @@ app.use(cors({
     origin: "*"
 })); // Enable CORS
 app.use(express.json()); // Parse JSON request bodies
-
+app.use(express.static("audios")); // Serve static files from the "audios" directory
 
 //check
 app.get("/", (req, res) => {

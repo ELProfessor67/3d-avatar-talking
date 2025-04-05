@@ -13,6 +13,7 @@ const execCommand = (command) => {
     });
   });
 };
+
 const lipSyncMessage = async (filename,rubarbpath) => {
     const time = new Date().getTime();
     console.log(`Starting conversion for message ${filename}`);
@@ -28,7 +29,7 @@ const lipSyncMessage = async (filename,rubarbpath) => {
     // -r phonetic is faster but less accurate
     console.log(`Lip sync done in ${new Date().getTime() - time}ms`);
 
-    return {lip_sync: `audios/${filename}.json`,wav_file: `audios/${filename}.wav`}
+    return {lip_sync: `audios/${filename}.json`,wav_file: `audios/${filename}.wav`,file_filename: `${filename}.wav`};
   };
 
 export async function getSpeakingData(text) {
@@ -55,7 +56,7 @@ export async function getSpeakingData(text) {
         console.log("audio generated...");
         const audioBuffer = await response.arrayBuffer();
         const base64Audio = Buffer.from(audioBuffer).toString('base64');
-        const audioSrc = `data:audio/mp3;base64,${base64Audio}`;
+        const audioSrc = `data:audio/wav;base64,${base64Audio}`;
 
   
         // Save the file
@@ -63,12 +64,12 @@ export async function getSpeakingData(text) {
         const filepath = path.join(process.cwd(),'audios',`${filename}.mp3`);
         const rubarbpath = path.join(process.cwd(),process.env.MODE == "dev" ? '/bin/rhubarb': '/linux/rhubarb');
         fs.writeFileSync(filepath, Buffer.from(audioBuffer));
-        const {lip_sync, wav_file} = await lipSyncMessage(filename,rubarbpath);
+        const {lip_sync, wav_file,file_filename} = await lipSyncMessage(filename,rubarbpath);
         const lips_sync_data = JSON.parse(fs.readFileSync(lip_sync));
         fs.unlinkSync(lip_sync)
-        fs.unlinkSync(wav_file)
+        // fs.unlinkSync(wav_file)
         fs.unlinkSync(filepath)
-        return {data: lips_sync_data.mouthCues,src: audioSrc};
+        return {data: lips_sync_data.mouthCues,src: file_filename};
     } catch (error) {
         console.error("Error:", error);
     }
