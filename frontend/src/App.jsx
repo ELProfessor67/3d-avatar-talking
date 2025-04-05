@@ -27,13 +27,13 @@ function App() {
     setIsRotating(false);
     lastRotation.current = avatarRotation[1];
   };
-  if (!start) {
-    return <>
-      <div className="main-box">
-        <button onClick={() => setStart(true)}>START</button>
-      </div>
-    </>
-  }
+  // if (!start) {
+  //   return <>
+  //     <div className="main-box">
+  //       <button onClick={() => setStart(true)}>START</button>
+  //     </div>
+  //   </>
+  // }
   return (
     <div
       onMouseMove={handleMouseMove}
