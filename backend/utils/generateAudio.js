@@ -55,7 +55,7 @@ export async function getSpeakingData(text) {
         console.log("audio generated...");
         const audioBuffer = await response.arrayBuffer();
         const base64Audio = Buffer.from(audioBuffer).toString('base64');
-        const audioSrc = `data:audio/wav;base64,${base64Audio}`;
+        const audioSrc = `data:audio/mp3;base64,${base64Audio}`;
 
   
         // Save the file
