@@ -1,0 +1,18 @@
+[33mc2c0527[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m HEAD@{0}: reset: moving to origin/main
+[33m4c1ab46[m HEAD@{1}: commit: first commit
+[33m0b6d7bc[m HEAD@{2}: commit: first commit
+[33mc2c0527[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m HEAD@{3}: commit: A
+[33mdcf6e73[m HEAD@{4}: commit: g
+[33me5865b6[m HEAD@{5}: commit: a
+[33m6add3ab[m HEAD@{6}: commit: first commit
+[33m7d86b67[m HEAD@{7}: commit: A
+[33m73760e3[m HEAD@{8}: commit: f
+[33mc2383f7[m HEAD@{9}: commit: add catch
+[33m17807c1[m HEAD@{10}: commit: first commit
+[33m65ed8b2[m HEAD@{11}: commit: print transciptions
+[33m212e26b[m HEAD@{12}: commit: add noise cancellation
+[33m28c8343[m HEAD@{13}: commit: Fix audio issue
+[33m807b11a[m HEAD@{14}: commit: CHange Promt
+[33m523ceb9[m HEAD@{15}: commit: Change Voice
+[33m0471078[m HEAD@{16}: Branch: renamed refs/heads/master to refs/heads/main
+[33m0471078[m HEAD@{18}: commit (initial): Initial Commit
