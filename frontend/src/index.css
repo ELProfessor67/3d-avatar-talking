@@ -1,0 +1,36 @@
+#root {
+  width: 100vw;
+  height: 100vh;
+}
+
+body {
+  margin: 0;
+}
+
+.status-box
+{
+  background: rgba(0, 0, 0, 0.274);
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 20px;
+}
+
+.main-box
+{
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.main-box button
+{
+  background-color: rgb(136, 7, 7);
+  color: white;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
