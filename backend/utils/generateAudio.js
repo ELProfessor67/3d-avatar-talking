@@ -69,7 +69,7 @@ export async function getSpeakingData(text) {
         fs.writeFileSync(filepath, Buffer.from(audioBuffer));
         const {lip_sync, wav_file,file_filename} = await lipSyncMessage(filename,rubarbpath);
         const lips_sync_data = JSON.parse(fs.readFileSync(lip_sync));
-        fs.unlinkSync(lip_sync)
+        // fs.unlinkSync(lip_sync)
         fs.unlinkSync(wav_file)
         fs.unlinkSync(filepath)
         return {data: lips_sync_data.mouthCues,src: file_filename};

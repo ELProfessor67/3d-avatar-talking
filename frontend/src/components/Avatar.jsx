@@ -21,7 +21,7 @@ const corresponding = {
 };
 
 const morphTargetSmoothing = 0.5;
-const smoothMorphTarget = false;
+const smoothMorphTarget = true;
 const blick_every_second = 2;
 const blin_off_is_second = 0.4;
 
@@ -52,44 +52,48 @@ export function Avatar(props) {
 
   const handlePlayAudio = async (src, data, type = "ongoing") => {
     if (audioRef.current) audioRef.current.pause();
-    audioRef.current = new Audio(src);
+
+    const audio = new Audio(src);
+    audioRef.current = audio;
     lipsyncRef.current = data;
 
-    audioRef.current.play().then(() => console.log("Audio played!"))
-      .catch(err => console.log("Error playing audio:", err?.message || err));
+    // Wait for audio to be ready before playing
+    const playAudio = () => {
+      audio.play().then(() => {
+        console.log("Audio played!");
+        setAudioPlay(true);
+        setAnimation("Talking");
+        props.setStatus("Speaking...");
+      }).catch(err => {
+        console.log("Error playing audio:", err?.message || err);
+      });
+    };
 
-    setAnimation("Talking")
-    props.setStatus("Speaking...");
+    // Ensures metadata is loaded first
+    audio.addEventListener('loadedmetadata', playAudio);
 
-
-    audioRef.current.addEventListener("ended", () => {
+    // Clean up on end
+    audio.addEventListener("ended", () => {
       setAudioPlay(false);
       audioRef.current = null;
       lipsyncRef.current = [];
-      setAnimation("Idle_1")
+      setAnimation("Idle_1");
       props.setStatus("Listening...");
 
       Object.values(corresponding).forEach((value) => {
+        const index = nodes.george_washington.morphTargetDictionary[value];
         if (!smoothMorphTarget) {
-          nodes.george_washington.morphTargetInfluences[
-            nodes.george_washington.morphTargetDictionary[value]
-          ] = 0;
+          nodes.george_washington.morphTargetInfluences[index] = 0;
         } else {
-          nodes.george_washington.morphTargetInfluences[
-            nodes.george_washington.morphTargetDictionary[value]
-          ] = THREE.MathUtils.lerp(
-            nodes.george_washington.morphTargetInfluences[
-            nodes.george_washington.morphTargetDictionary[value]
-            ],
+          nodes.george_washington.morphTargetInfluences[index] = THREE.MathUtils.lerp(
+            nodes.george_washington.morphTargetInfluences[index],
             0,
             morphTargetSmoothing
           );
-
         }
       });
     });
   };
-
 
   const handleIntrupt = async () => {
     if (audioRef.current) {
@@ -224,9 +228,9 @@ export function Avatar(props) {
   }, []);
 
   useEffect(() => {
-    console.log(animation,"animation")
+    console.log(animation, "animation")
     if (actions[animation]) {
-      actions[animation].reset().fadeIn(0.3).play()
+      actions[animation].reset().setEffectiveTimeScale(0.5).fadeIn(0.3).play()
     }
   }, [actions, animation, animations]);
   return (
