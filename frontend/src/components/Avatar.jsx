@@ -57,12 +57,6 @@ export function Avatar(props) {
     const audio = new Audio(src);
     audioRef.current = audio;
 
-    const handleTimeUpdate = () => {
-      console.log("Audio Current Time:", audio.currentTime);
-    };
-  
-    audio.addEventListener("timeupdate", handleTimeUpdate);  
-
     // Wait for audio to be ready before playing
     const playAudio = () => {
       audio.play().then(() => {
@@ -169,7 +163,6 @@ export function Avatar(props) {
         currentAudioTime >= mouthCue.start &&
         currentAudioTime <= mouthCue.end
       ) {
-        console.log(`${currentAudioTime}-${mouthCue.start} \n`,`${currentAudioTime}-${mouthCue.end} \n`,mouthCue.value)
         if (!smoothMorphTarget) {
           nodes.george_washington.morphTargetInfluences[
             nodes.george_washington.morphTargetDictionary[
@@ -200,11 +193,14 @@ export function Avatar(props) {
 
 
   
-  
-  useEffect(() => {
-    if (listingRef.current) return;
-    listingRef.current = new Listing(handlePlayAudio, handleIntrupt, props.setStatus);
-  }, []);
+
+  const handleStart = () => {
+    handlePlayAudio(welcome.src, welcome.data, "intial_message")
+    if (!listingRef.current) {
+      listingRef.current = new Listing(handlePlayAudio, handleIntrupt, props.setStatus);
+    }
+    setStart(true);
+  }
 
 
   useEffect(() => {
@@ -251,7 +247,7 @@ export function Avatar(props) {
       {
         !start &&
         <Html position={[0, -2.5, 0]}>
-          <button onClick={() => { setStart(true); handlePlayAudio(welcome.src, welcome.data, "intial_message") }} style={{ borderRadius: "5px", background: "red", color: "white", border: "none", cursor: "pointer", padding: "8px 15px" }}>Start</button>
+          <button onClick={handleStart} style={{ borderRadius: "5px", background: "red", color: "white", border: "none", cursor: "pointer", padding: "8px 15px" }}>Start</button>
         </Html>
       }
       <group ref={group} {...props} dispose={null}>

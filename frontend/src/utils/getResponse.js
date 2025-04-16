@@ -1,6 +1,6 @@
 
 // export const BACKEND_URL = "http://localhost:4000" 
-export const BACKEND_URL = "https://3davatar.backend.myrealmarket.com/" 
+export const BACKEND_URL = "https://3davatar.backend.myrealmarket.com" 
 
 
 export const getResponse = async (message) => {
