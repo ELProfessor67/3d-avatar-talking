@@ -20,7 +20,7 @@ export const Experience = ({ rotation }) => {
           {status}
         </div>
       </Html>
-      <Avatar position={[-0.1, -1.85, 1.5]} scale={1.49999999999999999999999} setStatus={setStatus}/>
+      <Avatar position={[-0.1, -1.75, 1.5]} scale={1.799999999999999999999999} setStatus={setStatus}/>
       <Note position={[-0.1, -1.5, 0]} scale={1.49999999999999999999999}/>
       <Environment preset="sunset" />
       <mesh scale={1}>
