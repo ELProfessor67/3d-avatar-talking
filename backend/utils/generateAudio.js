@@ -51,6 +51,7 @@ export async function getSpeakingData(text) {
             body: JSON.stringify(data)
         });
 
+       
         if (!response.ok) {
             const errorText = await response.text();
             console.error("Error response:", errorText);

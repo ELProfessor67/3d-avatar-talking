@@ -49,7 +49,13 @@ app.ws("/transcribtion", async (connection, req) => {
         assistantSpeaking: false,
     }
 
-    const transcriptionService = new TranscriptionService(handleIntrupt);
+    let transcriptionService;
+    try {
+        
+    transcriptionService = new TranscriptionService(handleIntrupt);
+    } catch (error) {
+        console.log("error")
+    }
 
     // Handle incoming messages from Twilio
     connection.on('message', async (message) => {

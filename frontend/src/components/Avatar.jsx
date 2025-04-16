@@ -53,9 +53,15 @@ export function Avatar(props) {
   const handlePlayAudio = async (src, data, type = "ongoing") => {
     if (audioRef.current) audioRef.current.pause();
 
+    lipsyncRef.current = data;
     const audio = new Audio(src);
     audioRef.current = audio;
-    lipsyncRef.current = data;
+
+    const handleTimeUpdate = () => {
+      console.log("Audio Current Time:", audio.currentTime);
+    };
+  
+    audio.addEventListener("timeupdate", handleTimeUpdate);  
 
     // Wait for audio to be ready before playing
     const playAudio = () => {
@@ -126,6 +132,7 @@ export function Avatar(props) {
     }
   }
 
+  
 
 
   useFrame(() => {
@@ -157,10 +164,12 @@ export function Avatar(props) {
 
     for (let i = 0; i < lipsyncRef.current.length; i++) {
       const mouthCue = lipsyncRef.current[i];
+
       if (
         currentAudioTime >= mouthCue.start &&
         currentAudioTime <= mouthCue.end
       ) {
+        console.log(`${currentAudioTime}-${mouthCue.start} \n`,`${currentAudioTime}-${mouthCue.end} \n`,mouthCue.value)
         if (!smoothMorphTarget) {
           nodes.george_washington.morphTargetInfluences[
             nodes.george_washington.morphTargetDictionary[
@@ -188,6 +197,10 @@ export function Avatar(props) {
     }
   });
 
+
+
+  
+  
   useEffect(() => {
     if (listingRef.current) return;
     listingRef.current = new Listing(handlePlayAudio, handleIntrupt, props.setStatus);
