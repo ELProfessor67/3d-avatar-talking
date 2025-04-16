@@ -38,7 +38,7 @@ export function Avatar(props) {
 
 
   const group = React.useRef();
-  const { scene, animations } = useGLTF('/models/1bill_george.glb')
+  const { scene, animations } = useGLTF('/models/george.glb')
   const clone = React.useMemo(() => SkeletonUtils.clone(scene), [scene])
   const { nodes, materials } = useGraph(clone)
   const { actions } = useAnimations(animations, group);
@@ -266,4 +266,4 @@ export function Avatar(props) {
   )
 }
 
-useGLTF.preload('/models/1bill_george.glb')
+useGLTF.preload('/models/george.glb')
